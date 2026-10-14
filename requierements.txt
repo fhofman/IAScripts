@@ -1,3 +1,6 @@
 asyncio
 openai
 anthropic
+scikit-learn
+langchain
+tiktoker
