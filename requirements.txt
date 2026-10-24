@@ -1,0 +1,9 @@
+openai
+anthropic
+scikit-learn
+langchain
+langchain-text-splitters
+langgraph
+tiktoken
+chromadb
+pydantic
