@@ -29,7 +29,7 @@ model = ChatOpenAI(model="gpt-4o-mini", temperature=0).bind_tools(tools)
 async def call_model(state: AgentState):
     # TODO: Invoca al modelo con los mensajes actuales
     # Retorna un diccionario con la nueva clave "messages"
-    model.ainvoke(state["messages"]) 
+    response = await model.ainvoke(state["messages"])
     return {"messages": [response]}
 
 # 5. Orquestación del Grafo
@@ -64,15 +64,19 @@ async def main():
     
     # Primera interacción
     print("--- Paso 1 ---")
-    app.ainvoke({
-        "messages": "Que clima hace en Madrid?"
-    })
+    result = await app.ainvoke(
+        {"messages": [HumanMessage(content="Que clima hace en Madrid?")]},
+        config=thread_config,
+    )
+    print(result["messages"][-1].content)
     
     # Segunda interacción (reanudando desde checkpoint)
     print("--- Paso 2 ---")
-    app.ainvoke({
-        "messages": "Que clima hace en Londres?"
-    })
-
+    result = await app.ainvoke(
+        {"messages": [HumanMessage(content="Que clima hace en Londres?")]},
+        config=thread_config,
+    )
+    print(result["messages"][-1].content)
+    
 if __name__ == "__main__":
     asyncio.run(main())
